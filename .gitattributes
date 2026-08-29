@@ -1,0 +1,10 @@
+# テキストファイルの改行コードをリポジトリ内で LF に正規化
+* text=auto
+
+# バイナリとして扱う（差分・マージを試みない）
+*.docx binary
+*.xlsx binary
+*.pptx binary
+*.png  binary
+*.jpg  binary
+*.pdf  binary
