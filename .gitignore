@@ -13,3 +13,6 @@ desktop.ini
 
 # Node
 node_modules/
+
+# ローカルのプレビュー設定（パスがマシン固有のため共有しない）
+.claude/launch.json

@@ -214,6 +214,270 @@
       cursor: pointer
     }
 
+    /* ===== アカウントメニュー ===== */
+    .acct {
+      position: relative;
+      display: inline-flex
+    }
+
+    .acct-btn {
+      font-family: var(--sans);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 210px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 12px 4px 4px;
+      cursor: pointer;
+      transition: .15s
+    }
+
+    .acct-btn:hover {
+      border-color: var(--blue)
+    }
+
+    .acct-btn:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px
+    }
+
+    .acct-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex: none
+    }
+
+    .acct-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .acct-caret {
+      flex: none;
+      color: var(--ink-soft);
+      transition: transform .15s
+    }
+
+    .acct-btn[aria-expanded="true"] .acct-caret {
+      transform: rotate(180deg)
+    }
+
+    .acct-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 244px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 8px 28px rgba(13, 27, 42, .14);
+      padding: 6px;
+      z-index: 30;
+      display: none
+    }
+
+    .acct-menu.show {
+      display: block
+    }
+
+    .acct-info {
+      padding: 12px 12px 13px;
+      border-bottom: 1px solid var(--line-soft);
+      margin-bottom: 6px
+    }
+
+    .acct-info .org {
+      font-size: 13.5px;
+      font-weight: 700;
+      line-height: 1.4
+    }
+
+    .acct-info .person {
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin-top: 3px
+    }
+
+    .acct-info .mail {
+      font-size: 11.5px;
+      color: var(--ink-soft);
+      margin-top: 1px;
+      word-break: break-all
+    }
+
+    .acct-item {
+      font-family: var(--sans);
+      width: 100%;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+      color: var(--ink);
+      background: transparent;
+      border: 0;
+      border-radius: 8px;
+      padding: 9px 12px;
+      cursor: pointer;
+      transition: .12s
+    }
+
+    .acct-item:hover {
+      background: var(--bg)
+    }
+
+    .acct-item svg {
+      flex: none;
+      color: var(--ink-soft)
+    }
+
+    /* ===== ログイン画面（ダミー） ===== */
+    .login-view {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: var(--bg);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-y: auto
+    }
+
+    .login-view.show {
+      display: flex
+    }
+
+    /* ログアウト中はダッシュボード本体を隠す（背後のタブ移動も防ぐ） */
+    body.logged-out {
+      overflow: hidden
+    }
+
+    body.logged-out>.topbar,
+    body.logged-out>main,
+    body.logged-out>#histView,
+    body.logged-out>#listView {
+      display: none !important
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(13, 27, 42, .10);
+      padding: 34px 32px 30px
+    }
+
+    .login-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 26px
+    }
+
+    .login-brand img {
+      height: 34px;
+      width: auto
+    }
+
+    .login-brand h1 {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      margin: 0;
+      text-align: center
+    }
+
+    .login-field {
+      margin-bottom: 15px
+    }
+
+    .login-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-bottom: 6px
+    }
+
+    .login-field input {
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--ink);
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 10px 12px;
+      transition: .15s
+    }
+
+    .login-field input:focus {
+      outline: 0;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(27, 38, 59, .10)
+    }
+
+    .login-btn {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 700;
+      width: 100%;
+      color: #fff;
+      background: var(--blue);
+      border: 0;
+      border-radius: 9px;
+      padding: 12px;
+      cursor: pointer;
+      transition: .15s;
+      margin-top: 6px
+    }
+
+    .login-btn:hover {
+      background: var(--blue-d)
+    }
+
+    .login-error {
+      font-size: 12px;
+      color: var(--sakura);
+      background: var(--sakura-bg);
+      border-radius: 8px;
+      padding: 9px 12px;
+      margin-bottom: 14px;
+      display: none
+    }
+
+    .login-error.show {
+      display: block
+    }
+
+    .login-note {
+      font-size: 11px;
+      color: var(--ink-soft);
+      text-align: center;
+      line-height: 1.7;
+      margin: 18px 0 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--line-soft)
+    }
+
     main {
       padding: clamp(16px, 3vw, 28px) clamp(16px, 4vw, 40px) 56px;
       max-width: 1180px;
@@ -1698,8 +1962,47 @@
         <select id="storeSel"></select>
       </span>
       <button id="btnRefresh" class="btn-refresh">↺ データ更新</button>
+      <div class="acct">
+        <button id="acctBtn" class="acct-btn" aria-haspopup="true" aria-expanded="false" aria-controls="acctMenu">
+          <span class="acct-avatar" id="acctAvatar" aria-hidden="true"></span>
+          <span class="acct-name" id="acctName"></span>
+          <svg class="acct-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="acct-menu" id="acctMenu" role="menu" aria-labelledby="acctBtn">
+          <div class="acct-info">
+            <div class="org" id="acctOrg"></div>
+            <div class="person" id="acctPerson"></div>
+            <div class="mail" id="acctMail"></div>
+          </div>
+          <button type="button" class="acct-item" id="btnLogout" role="menuitem">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 14H3.5A1.5 1.5 0 0 1 2 12.5v-9A1.5 1.5 0 0 1 3.5 2H6M10.5 11 14 8l-3.5-3M14 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            ログアウト
+          </button>
+        </div>
+      </div>
     </div>
   </header>
+
+  <!-- ログイン画面（ダミー：実際の認証は行っていない） -->
+  <div class="login-view" id="loginView">
+    <form class="login-card" id="loginForm" autocomplete="off">
+      <div class="login-brand">
+        <img src="logo.png" alt="ろかまっぷ。">
+        <h1>まちの見える化ダッシュボード</h1>
+      </div>
+      <p class="login-error" id="loginError">ログインIDとパスワードを入力してください。</p>
+      <div class="login-field">
+        <label for="loginId">ログインID</label>
+        <input type="text" id="loginId" name="loginId" placeholder="kanko@city.example.lg.jp">
+      </div>
+      <div class="login-field">
+        <label for="loginPw">パスワード</label>
+        <input type="password" id="loginPw" name="loginPw" placeholder="********">
+      </div>
+      <button type="submit" class="login-btn">ログイン</button>
+      <p class="login-note">これはデモ用のダミー画面です。認証は行われないため、<br>任意の値を入力してログインしてください。</p>
+    </form>
+  </div>
 
   <main id="dashView">
 
@@ -3735,6 +4038,85 @@
 
     // ===== 参加者一覧 =====
     document.getElementById('btnList').addEventListener('click', showListView);
+
+
+    // ===== アカウント / ログイン（ダミー：実際の認証は行っていない） =====
+    // 表示するアカウント情報。導入先の自治体に合わせてここを書き換える。
+    const ACCOUNT = {
+      org: '〇〇市',
+      person: '観光振興課 ご担当者',
+      mail: 'kanko@city.example.lg.jp'
+    };
+    const AUTH_KEY = 'rokamap_auth';
+
+    function applyAccount() {
+      document.getElementById('acctAvatar').textContent = ACCOUNT.org.slice(0, 1);
+      document.getElementById('acctName').textContent = ACCOUNT.org;
+      document.getElementById('acctOrg').textContent = ACCOUNT.org;
+      document.getElementById('acctPerson').textContent = ACCOUNT.person;
+      document.getElementById('acctMail').textContent = ACCOUNT.mail;
+    }
+
+    // プライベートブラウズ等で localStorage が使えない場合もダッシュボードは動かす
+    function isLoggedIn() {
+      try { return localStorage.getItem(AUTH_KEY) === '1'; } catch (e) { return false; }
+    }
+
+    function closeAcctMenu() {
+      document.getElementById('acctMenu').classList.remove('show');
+      document.getElementById('acctBtn').setAttribute('aria-expanded', 'false');
+    }
+
+    function showLogin() {
+      closeAcctMenu();
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginError').classList.remove('show');
+      document.getElementById('loginView').classList.add('show');
+      document.body.classList.add('logged-out');
+    }
+
+    function showApp() {
+      document.getElementById('loginView').classList.remove('show');
+      document.body.classList.remove('logged-out');
+      window.scrollTo({ top: 0 });
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const id = document.getElementById('loginId').value.trim();
+      const pw = document.getElementById('loginPw').value;
+      // ダミー認証：空欄でなければ通す。パスワードは照合も保存もしない。
+      if (!id || !pw) {
+        document.getElementById('loginError').classList.add('show');
+        return;
+      }
+      try { localStorage.setItem(AUTH_KEY, '1'); } catch (e) { }
+      showApp();
+    });
+
+    document.getElementById('acctBtn').addEventListener('click', function (e) {
+      e.stopPropagation();
+      const menu = document.getElementById('acctMenu');
+      const opening = !menu.classList.contains('show');
+      menu.classList.toggle('show', opening);
+      this.setAttribute('aria-expanded', opening);
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', function () {
+      try { localStorage.removeItem(AUTH_KEY); } catch (e) { }
+      showLogin();
+    });
+
+    // メニューの外側クリック / Esc で閉じる
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.acct')) closeAcctMenu();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeAcctMenu();
+    });
+
+    applyAccount();
+    if (!isLoggedIn()) showLogin();
 
     renderCatLegend();
     setEvent(0);
