@@ -26,6 +26,17 @@
       --route-dk: #C2410C;
       --route-bg: #FFF4E5;
       --sans: "Inter", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, "Helvetica Neue", Arial, sans-serif;
+
+      /* ===== 文字サイズ体系（UIには12px未満を使わない。10pxはグラフ内部のみ） ===== */
+      --fs-num:  clamp(24px, 3vw, 30px);    /* KPI・カルテの主役の数値 */
+      --fs-h1:   clamp(20px, 2.6vw, 24px);  /* 画面タイトル */
+      --fs-h2:   clamp(17px, 2.2vw, 20px);  /* セクション見出し */
+      --fs-h3:   16px;                      /* パネル・カードの見出し */
+      --fs-body: 14px;                      /* 本文、および箱のタイトル（太字と色で区別） */
+      --fs-ui:   13px;                      /* ボタン・タブ・フォーム・ピル・メニュー項目 */
+      --fs-note: 12px;                      /* 注釈・凡例・テーブル見出し・メタ情報 */
+      --fs-micro: 10px;
+      --fs-svg-axis: 9px;                   /* SVG viewBox 内のユーザー単位（画面実寸ではない） */                      /* SVGグラフ内部の軸ラベルと密なグリッドのセル文字のみ */
     }
 
     * {
@@ -41,7 +52,7 @@
       background: var(--bg);
       color: var(--ink);
       font-family: var(--sans);
-      font-size: 14px;
+      font-size: var(--fs-body);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased
     }
@@ -81,7 +92,7 @@
     .brand h1 {
       font-weight: 700;
       letter-spacing: .02em;
-      font-size: clamp(16px, 2.3vw, 20px);
+      font-size: var(--fs-h1);
       margin: 0;
       white-space: nowrap
     }
@@ -107,7 +118,7 @@
     }
 
     .modebadge {
-      font-size: 13px;
+      font-size: var(--fs-ui);
       font-weight: 700;
       padding: 5px 16px;
       border-radius: 20px;
@@ -122,7 +133,7 @@
 
     .btn-refresh {
       font-family: var(--sans);
-      font-size: 12.5px;
+      font-size: var(--fs-ui);
       color: var(--blue);
       background: var(--blue-l);
       border: 1px solid var(--blue);
@@ -152,7 +163,7 @@
 
     .period {
       color: var(--ink-soft);
-      font-size: 12px;
+      font-size: var(--fs-ui);
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 6px 11px
@@ -168,7 +179,7 @@
 
     .toggle button {
       font-family: var(--sans);
-      font-size: 13px;
+      font-size: var(--fs-ui);
       color: var(--ink-soft);
       background: transparent;
       border: 0;
@@ -196,7 +207,7 @@
       align-items: center;
       gap: 8px;
       color: var(--ink-soft);
-      font-size: 12.5px
+      font-size: var(--fs-ui)
     }
 
     .storepick.show {
@@ -205,13 +216,329 @@
 
     .storepick select {
       font-family: var(--sans);
-      font-size: 13px;
+      font-size: var(--fs-ui);
       color: var(--ink);
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 6px 10px;
       cursor: pointer
+    }
+
+    /* ===== アカウントメニュー ===== */
+    .acct {
+      position: relative;
+      display: inline-flex
+    }
+
+    .acct-btn {
+      font-family: var(--sans);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 210px;
+      font-size: var(--fs-ui);
+      font-weight: 600;
+      color: var(--ink);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 12px 4px 4px;
+      cursor: pointer;
+      transition: .15s
+    }
+
+    .acct-btn:hover {
+      border-color: var(--blue)
+    }
+
+    .acct-btn:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px
+    }
+
+    .acct-avatar {
+      width: 28px;
+      height: 28px;
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .acct-avatar svg {
+      width: 100%;
+      height: 100%;
+      display: block
+    }
+
+    .acct-info-head {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .acct-info-head .acct-avatar {
+      width: 34px;
+      height: 34px
+    }
+
+    .acct-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .acct-caret {
+      flex: none;
+      color: var(--ink-soft);
+      transition: transform .15s
+    }
+
+    .acct-btn[aria-expanded="true"] .acct-caret {
+      transform: rotate(180deg)
+    }
+
+    .acct-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 244px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 8px 28px rgba(13, 27, 42, .14);
+      padding: 6px;
+      z-index: 30;
+      display: none
+    }
+
+    .acct-menu.show {
+      display: block
+    }
+
+    .acct-info {
+      padding: 12px 12px 13px;
+      border-bottom: 1px solid var(--line-soft);
+      margin-bottom: 6px
+    }
+
+    .acct-info .org {
+      font-size: var(--fs-ui);
+      font-weight: 700;
+      line-height: 1.4
+    }
+
+    .acct-info .person {
+      font-size: var(--fs-ui);
+      color: var(--ink-soft);
+      margin-top: 3px
+    }
+
+    .acct-info .mail {
+      font-size: var(--fs-note);
+      color: var(--ink-soft);
+      margin-top: 9px;
+      word-break: break-all
+    }
+
+    .acct-item {
+      font-family: var(--sans);
+      width: 100%;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: var(--fs-ui);
+      color: var(--ink);
+      background: transparent;
+      border: 0;
+      border-radius: 8px;
+      padding: 9px 12px;
+      cursor: pointer;
+      transition: .12s
+    }
+
+    .acct-item:hover {
+      background: var(--bg)
+    }
+
+    .acct-item svg {
+      flex: none;
+      color: var(--ink-soft)
+    }
+
+    /* ===== ログイン画面（ダミー） ===== */
+    .login-view {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: var(--bg);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-y: auto
+    }
+
+    .login-view.show {
+      display: flex
+    }
+
+    /* ログアウト中はダッシュボード本体を隠す（背後のタブ移動も防ぐ） */
+    body.logged-out {
+      overflow: hidden
+    }
+
+    body.logged-out>.topbar,
+    body.logged-out>main,
+    body.logged-out>#histView,
+    body.logged-out>#listView {
+      display: none !important
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(13, 27, 42, .10);
+      padding: 34px 32px 30px
+    }
+
+    .login-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 26px
+    }
+
+    .login-brand img {
+      height: 34px;
+      width: auto
+    }
+
+    .login-brand h1 {
+      font-size: var(--fs-h3);
+      font-weight: 700;
+      letter-spacing: .02em;
+      margin: 0;
+      text-align: center
+    }
+
+    .login-field {
+      margin-bottom: 15px
+    }
+
+    .login-field label {
+      display: block;
+      font-size: var(--fs-ui);
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-bottom: 6px
+    }
+
+    .login-field input {
+      font-family: var(--sans);
+      font-size: var(--fs-body);
+      color: var(--ink);
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 10px 12px;
+      transition: .15s
+    }
+
+    .login-field input:focus {
+      outline: 0;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(27, 38, 59, .10)
+    }
+
+    .login-btn {
+      font-family: var(--sans);
+      font-size: var(--fs-body);
+      font-weight: 700;
+      width: 100%;
+      color: #fff;
+      background: var(--blue);
+      border: 0;
+      border-radius: 9px;
+      padding: 12px;
+      cursor: pointer;
+      transition: .15s;
+      margin-top: 6px
+    }
+
+    .login-btn:hover {
+      background: var(--blue-d)
+    }
+
+    .login-error {
+      font-size: var(--fs-ui);
+      color: var(--sakura);
+      background: var(--sakura-bg);
+      border-radius: 8px;
+      padding: 9px 12px;
+      margin-bottom: 14px;
+      display: none
+    }
+
+    .login-error.show {
+      display: block
+    }
+
+
+    .login-sub {
+      font-size: var(--fs-h3);
+      font-weight: 700;
+      text-align: center;
+      margin: 0 0 8px
+    }
+
+    .login-desc {
+      font-size: var(--fs-note);
+      color: var(--ink-soft);
+      line-height: 1.75;
+      text-align: center;
+      margin: 0 0 20px
+    }
+
+    .login-link {
+      font-family: var(--sans);
+      font-size: var(--fs-note);
+      font-weight: 600;
+      color: var(--blue);
+      background: none;
+      border: 0;
+      width: 100%;
+      padding: 13px 0 0;
+      cursor: pointer;
+      text-align: center
+    }
+
+    .login-link:hover {
+      text-decoration: underline
+    }
+
+    .login-done {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 14px;
+      color: var(--green)
+    }
+
+    .login-note {
+      font-size: var(--fs-note);
+      color: var(--ink-soft);
+      text-align: center;
+      line-height: 1.7;
+      margin: 18px 0 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--line-soft)
     }
 
     main {
@@ -234,7 +561,7 @@
     }
 
     .eyebrow {
-      font-size: 11px;
+      font-size: var(--fs-body);
       letter-spacing: .18em;
       text-transform: uppercase;
       color: var(--ink-soft);
@@ -243,7 +570,7 @@
 
     .viewnote {
       color: var(--ink-soft);
-      font-size: 12.5px;
+      font-size: var(--fs-ui);
       margin: 0 0 18px
     }
 
@@ -258,7 +585,7 @@
       border-radius: 16px;
       padding: 0;
       margin-bottom: 24px;
-      font-size: clamp(14px, 1.8vw, 17px);
+      font-size: var(--fs-h2);
       font-weight: 400;
       line-height: 1.9;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 28px rgba(35,70,168,0.1);
@@ -271,9 +598,9 @@
     }
 
     .hl-label {
-      font-size: 10px;
+      font-size: var(--fs-body);
       font-weight: 700;
-      letter-spacing: .2em;
+      letter-spacing: .08em;
       text-transform: uppercase;
       color: var(--blue);
       display: block;
@@ -305,7 +632,7 @@
       border-radius: 14px;
       padding: 16px 22px;
       margin: 0 0 24px;
-      font-size: 13px;
+      font-size: var(--fs-body);
       line-height: 1.75;
       color: var(--ink);
     }
@@ -316,7 +643,7 @@
       box-shadow: 0 3px 8px rgba(35,70,168,0.25);
     }
     .ai-tip-label {
-      font-size: 10.5px; font-weight: 700; letter-spacing: .1em; color: var(--blue);
+      font-size: var(--fs-body); font-weight: 700; letter-spacing: .1em; color: var(--blue);
       text-transform: uppercase; display: block; margin-bottom: 4px;
     }
     .ai-tip-body b { color: var(--ink); font-weight: 700; }
@@ -325,7 +652,7 @@
       border-top: 1px dashed var(--blue-l);
     }
     .ai-refs-label {
-      display: block; font-size: 10.5px; font-weight: 700;
+      display: block; font-size: var(--fs-note); font-weight: 700;
       letter-spacing: .06em; color: var(--ink-soft); margin-bottom: 6px;
     }
     .ai-refs-label .dummy {
@@ -333,12 +660,12 @@
     }
     .ai-ref {
       display: inline-flex; align-items: baseline; gap: 5px;
-      font-size: 12px; line-height: 1.6; color: var(--blue);
+      font-size: var(--fs-ui); line-height: 1.6; color: var(--blue);
       text-decoration: none; border-bottom: 1px solid transparent;
       margin: 0 16px 2px 0;
     }
     .ai-ref:hover { border-bottom-color: var(--blue); }
-    .ai-ref .ai-ref-org { color: var(--ink-soft); font-size: 11px; }
+    .ai-ref .ai-ref-org { color: var(--ink-soft); font-size: var(--fs-note); }
     .ai-ref svg { flex: none; align-self: center; opacity: .7; }
 
     /* flow biz tabs */
@@ -350,7 +677,7 @@
 
     .ftab {
       font-family: var(--sans);
-      font-size: 12.5px;
+      font-size: var(--fs-ui);
       font-weight: 600;
       padding: 6px 18px;
       border-radius: 8px;
@@ -382,7 +709,7 @@
     }
 
     .flow-biz-name {
-      font-size: 13px;
+      font-size: var(--fs-ui);
       font-weight: 600
     }
 
@@ -401,7 +728,7 @@
     }
 
     .flow-biz-num {
-      font-size: 15px;
+      font-size: var(--fs-h3);
       font-weight: 700;
       text-align: right
     }
@@ -412,7 +739,7 @@
       align-items: center;
       gap: 10px;
       margin: 26px 0 12px;
-      font-size: 14px;
+      font-size: var(--fs-body);
       font-weight: 700;
       letter-spacing: .01em
     }
@@ -426,14 +753,14 @@
       border-radius: 7px;
       background: var(--blue);
       color: #fff;
-      font-size: 13px;
+      font-size: var(--fs-ui);
       flex: none
     }
 
     .zonelabel .sub {
       font-weight: 400;
       color: var(--ink-soft);
-      font-size: 12px
+      font-size: var(--fs-ui)
     }
 
     .zonelabel.q2 .b {
@@ -461,32 +788,32 @@
     }
 
     .carte .cl {
-      font-size: 11.5px;
+      font-size: var(--fs-note);
       color: var(--ink-soft)
     }
 
     .carte .cv {
-      font-size: clamp(22px, 3vw, 30px);
+      font-size: var(--fs-num);
       font-weight: 700;
       line-height: 1.1;
       margin-top: 5px
     }
 
     .carte .cv small {
-      font-size: 13px;
+      font-size: var(--fs-ui);
       color: var(--ink-soft);
       font-weight: 400;
       margin-left: 2px
     }
 
     .carte .cs {
-      font-size: 11px;
+      font-size: var(--fs-note);
       color: var(--ink-soft);
       margin-top: 4px
     }
 
     .carte .bm {
-      font-size: 10.5px;
+      font-size: var(--fs-note);
       color: var(--blue);
       background: var(--blue-l);
       border-radius: 4px;
@@ -525,13 +852,13 @@
     }
 
     .panel h3 {
-      font-size: 15px;
+      font-size: var(--fs-h3);
       margin: 0 0 2px;
       font-weight: 700
     }
 
     .panel .desc {
-      font-size: 11.5px;
+      font-size: var(--fs-body);
       color: var(--ink-soft);
       margin: 0 0 15px
     }
@@ -552,7 +879,7 @@
     }
 
     .trend-y span {
-      font-size: 9px;
+      font-size: var(--fs-micro);
       color: var(--ink-soft);
       text-align: right;
       font-variant-numeric: tabular-nums;
@@ -593,7 +920,7 @@
       transform: translateX(-50%);
       background: var(--ink);
       color: #fff;
-      font-size: 11px;
+      font-size: var(--fs-note);
       white-space: nowrap;
       padding: 3px 7px;
       border-radius: 5px;
@@ -605,7 +932,7 @@
       display: flex;
       justify-content: space-between;
       color: var(--ink-soft);
-      font-size: 10.5px;
+      font-size: var(--fs-micro);
       margin-top: 8px;
       margin-left: 32px
     }
@@ -613,7 +940,7 @@
     .trend-legend {
       display: flex;
       gap: 16px;
-      font-size: 11px;
+      font-size: var(--fs-note);
       color: var(--ink-soft);
       margin-top: 6px
     }
@@ -648,19 +975,19 @@
     }
 
     .tile .tn {
-      font-size: 12px;
+      font-size: var(--fs-ui);
       font-weight: 600;
       line-height: 1.35
     }
 
     .tile .tv {
-      font-size: 19px;
+      font-size: var(--fs-h2);
       font-weight: 700;
       margin-top: 6px
     }
 
     .tile .tu {
-      font-size: 10.5px;
+      font-size: var(--fs-note);
       opacity: .8
     }
 
@@ -669,7 +996,7 @@
       align-items: center;
       gap: 6px;
       margin-top: 13px;
-      font-size: 11px;
+      font-size: var(--fs-note);
       color: var(--ink-soft)
     }
 
@@ -688,7 +1015,7 @@
     }
 
     .bar2 .name {
-      font-size: 12.5px
+      font-size: var(--fs-ui)
     }
 
     .bar2 .track {
@@ -706,7 +1033,7 @@
     }
 
     .bar2 .val {
-      font-size: 12px;
+      font-size: var(--fs-ui);
       text-align: right;
       color: var(--ink-soft)
     }
@@ -745,7 +1072,7 @@
       display: flex;
       align-items: center;
       gap: 7px;
-      font-size: 12px;
+      font-size: var(--fs-ui);
       line-height: 1.4;
       margin: 7px 0
     }
@@ -783,7 +1110,7 @@
     }
 
     .demo .vb-val {
-      font-size: 10.5px;
+      font-size: var(--fs-note);
       color: var(--ink-soft);
       font-variant-numeric: tabular-nums;
       margin-bottom: 3px
@@ -805,7 +1132,7 @@
     }
 
     .demo .vb-lbl {
-      font-size: 10.5px;
+      font-size: var(--fs-note);
       color: var(--ink-soft);
       margin-top: 7px;
       white-space: nowrap
@@ -822,7 +1149,7 @@
     }
 
     .demo .col h4 {
-      font-size: 11.5px;
+      font-size: var(--fs-body);
       color: var(--ink-soft);
       font-weight: 700;
       margin: 0 0 10px
@@ -834,7 +1161,7 @@
       align-items: center;
       gap: 8px;
       margin: 7px 0;
-      font-size: 12px;
+      font-size: var(--fs-ui);
       line-height: 1.35
     }
 
@@ -865,7 +1192,7 @@
       display: grid;
       grid-template-columns: 26px repeat(6, 1fr);
       gap: 2px;
-      font-size: 9.5px
+      font-size: var(--fs-micro)
     }
 
     .heat .h,
@@ -888,13 +1215,13 @@
 
     /* ===== まち全体参考値（事業者ビュー） ===== */
     .town-ref-btn {
-      font-family: var(--sans); font-size: 11.5px; color: var(--ink-soft);
+      font-family: var(--sans); font-size: var(--fs-note); color: var(--ink-soft);
       background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
       padding: 4px 12px; cursor: pointer; transition: .15s;
     }
     .town-ref-btn:hover { border-color: var(--blue); color: var(--blue); }
     .town-ref-badge {
-      font-size: 10px; font-weight: 700; letter-spacing: .08em;
+      font-size: var(--fs-note); font-weight: 700; letter-spacing: .08em;
       color: var(--ink-soft); text-transform: uppercase;
     }
 
@@ -918,7 +1245,7 @@
     }
 
     .flow .route {
-      font-size: 13.5px
+      font-size: var(--fs-ui)
     }
 
     .flow .route .to {
@@ -932,7 +1259,7 @@
 
     .flow .route .tag {
       display: inline-block;
-      font-size: 10px;
+      font-size: var(--fs-note);
       color: #fff;
       background: var(--blue);
       border-radius: 5px;
@@ -942,14 +1269,14 @@
     }
 
     .flow .cnt {
-      font-size: 16px;
+      font-size: var(--fs-h3);
       font-weight: 700
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12.5px
+      font-size: var(--fs-ui)
     }
 
     th,
@@ -960,7 +1287,7 @@
     }
 
     th {
-      font-size: 11px;
+      font-size: var(--fs-note);
       color: var(--ink-soft);
       font-weight: 700
     }
@@ -972,7 +1299,7 @@
 
     .pill {
       display: inline-block;
-      font-size: 10.5px;
+      font-size: var(--fs-note);
       background: var(--bg);
       border-radius: 5px;
       padding: 2px 7px;
@@ -1025,12 +1352,12 @@
     }
 
     .ch2 .step .cap {
-      font-size: 12px;
+      font-size: var(--fs-ui);
       font-weight: 700
     }
 
     .ch2 .step .big {
-      font-size: clamp(20px, 3vw, 26px);
+      font-size: var(--fs-num);
       font-weight: 700;
       line-height: 1;
       margin: 6px 0 1px
@@ -1041,12 +1368,12 @@
     }
 
     .ch2 .step .unit {
-      font-size: 11px;
+      font-size: var(--fs-note);
       color: var(--ink-soft)
     }
 
     .ch2 .step .def {
-      font-size: 11px;
+      font-size: var(--fs-note);
       color: var(--ink-soft);
       margin-top: 8px;
       border-top: 1px solid var(--line);
@@ -1063,22 +1390,22 @@
     }
 
     .ch2 .arrow .pct {
-      font-size: 15px;
+      font-size: var(--fs-h3);
       font-weight: 700;
       color: var(--green)
     }
 
     .ch2 .arrow .glyph {
-      font-size: 14px;
+      font-size: var(--fs-body);
       color: var(--blue-l)
     }
 
     .ch2 .arrow .lbl {
-      font-size: 9.5px
+      font-size: var(--fs-micro)
     }
 
     .ch2note {
-      font-size: 12px;
+      font-size: var(--fs-ui);
       color: var(--ink-soft);
       margin: 14px 0 0;
       line-height: 1.6
@@ -1090,7 +1417,7 @@
 
     .foot {
       color: var(--ink-soft);
-      font-size: 11.5px;
+      font-size: var(--fs-note);
       margin-top: 26px;
       line-height: 1.7;
       border-top: 1px solid var(--line);
@@ -1120,14 +1447,14 @@
     }
 
     .map-hdr h2 {
-      font-size: clamp(14px, 2vw, 17px);
+      font-size: var(--fs-h2);
       font-weight: 700;
       margin: 4px 0 0;
       color: var(--ink)
     }
 
     .map-hdr .sub {
-      font-size: 12px;
+      font-size: var(--fs-ui);
       color: var(--ink-soft);
       font-weight: 400;
       margin-left: 8px
@@ -1147,7 +1474,7 @@
     }
 
     .filter-lbl {
-      font-size: 11.5px;
+      font-size: var(--fs-note);
       color: var(--ink-soft);
       white-space: nowrap
     }
@@ -1163,7 +1490,7 @@
 
     .ftabs .fb {
       font-family: var(--sans);
-      font-size: 11.5px;
+      font-size: var(--fs-note);
       color: var(--ink-soft);
       background: transparent;
       border: 0;
@@ -1177,7 +1504,7 @@
 
     .ftabs .fb small {
       display: block;
-      font-size: 9px;
+      font-size: var(--fs-micro);
       opacity: .65
     }
 
@@ -1202,13 +1529,13 @@
       display: inline-flex; align-items: center; gap: 8px;
       padding: 6px 14px; border: 1.5px solid var(--line); border-radius: 8px;
       background: var(--card); color: var(--ink);
-      font-family: var(--sans); font-size: 13px; cursor: pointer;
+      font-family: var(--sans); font-size: var(--fs-ui); cursor: pointer;
       transition: border-color .15s, box-shadow .15s; white-space: nowrap;
     }
     .drp-trigger:hover { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-l); }
     .drp-trigger.open { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-l); }
     .drp-date { font-weight: 700; color: var(--blue); }
-    .drp-arrow { color: var(--ink-soft); font-size: 11px; }
+    .drp-arrow { color: var(--ink-soft); font-size: var(--fs-note); }
     .drp-cal {
       display: none; position: absolute; top: calc(100% + 6px); left: 0; z-index: 200;
       background: #fff; border: 1px solid var(--line); border-radius: 14px;
@@ -1217,12 +1544,12 @@
     }
     .drp-cal.show { display: block; }
     .drp-months { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .drp-month-hdr { font-weight: 700; font-size: 13px; color: var(--ink); text-align: center; margin-bottom: 10px; }
+    .drp-month-hdr { font-weight: 700; font-size: var(--fs-ui); color: var(--ink); text-align: center; margin-bottom: 10px; }
     .drp-grid { display: grid; grid-template-columns: repeat(7, 34px); gap: 1px; }
-    .drp-dow { font-size: 10px; font-weight: 700; color: var(--ink-soft); text-align: center; padding: 4px 0; }
+    .drp-dow { font-size: var(--fs-micro); font-weight: 700; color: var(--ink-soft); text-align: center; padding: 4px 0; }
     .drp-day {
       width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
-      font-size: 12px; cursor: pointer; transition: background .1s, color .1s;
+      font-size: var(--fs-ui); cursor: pointer; transition: background .1s, color .1s;
       border: none; background: transparent; color: var(--ink);
       font-family: var(--sans); border-radius: 50%; position: relative;
     }
@@ -1239,11 +1566,11 @@
       margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line-soft);
     }
     .drp-reset {
-      font-size: 12px; color: var(--ink-soft); background: none; border: none;
+      font-size: var(--fs-ui); color: var(--ink-soft); background: none; border: none;
       cursor: pointer; font-family: var(--sans); padding: 4px 8px; border-radius: 6px;
     }
     .drp-reset:hover { background: var(--bg); color: var(--blue); }
-    .drp-hint { font-size: 11px; color: var(--ink-soft); }
+    .drp-hint { font-size: var(--fs-note); color: var(--ink-soft); }
 
     .map-wrap {
       position: relative;
@@ -1322,7 +1649,7 @@
       position: absolute;
       background: var(--ink);
       color: #fff;
-      font-size: 12px;
+      font-size: var(--fs-ui);
       line-height: 1.58;
       padding: 9px 13px;
       border-radius: 8px;
@@ -1351,7 +1678,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 11px;
+      font-size: var(--fs-note);
       color: var(--ink-soft)
     }
 
@@ -1363,7 +1690,7 @@
     }
 
     .map-hint {
-      font-size: 11.5px;
+      font-size: var(--fs-note);
       color: var(--blue);
       margin-left: auto;
       flex-shrink: 0
@@ -1419,7 +1746,7 @@
         }
       }
     }
-    .event-pick{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-soft)}.event-pick select{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--blue);background:var(--blue-l);border:1.5px solid var(--blue);border-radius:8px;padding:6px 10px;cursor:pointer}.btn-history{font-family:var(--sans);font-size:12.5px;color:var(--blue);background:var(--blue-l);border:1.5px solid var(--blue);border-radius:8px;padding:7px 14px;cursor:pointer;font-weight:700;transition:.15s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}.btn-history:hover{background:var(--blue);color:#fff}.hist-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap}.btn-hist-back{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--blue);background:var(--blue-l);border:1.5px solid var(--blue);border-radius:8px;padding:8px 16px;cursor:pointer;transition:.15s}.btn-hist-back:hover{background:var(--blue);color:#fff}.hist-title{font-size:clamp(18px,2.5vw,22px);font-weight:700;margin:0}.hist-badge{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--ink-soft);background:var(--bg);border-radius:6px;padding:4px 10px;margin-left:auto}.hist-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}.hist-kpi-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}.hist-kpi-card .kl{font-size:11.5px;color:var(--ink-soft)}.hist-kpi-card .kv{font-size:clamp(22px,3vw,30px);font-weight:700;line-height:1.1;margin-top:5px}.hist-kpi-card .kv small{font-size:13px;color:var(--ink-soft);font-weight:400;margin-left:2px}.hist-kpi-card .ks{font-size:11px;color:var(--ink-soft);margin-top:4px}.hist-section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px 24px;margin-bottom:20px}.hist-section h3{font-size:15px;font-weight:700;margin:0 0 3px}.hist-section .desc{font-size:11.5px;color:var(--ink-soft);margin:0 0 18px}.hist-trend-wrap{display:flex;gap:32px;align-items:flex-end;padding-bottom:10px;border-bottom:1px solid var(--line-soft)}.hist-trend-group{flex:1;display:flex;flex-direction:column;align-items:center}.hist-trend-bars{display:flex;gap:6px;align-items:flex-end;height:160px;justify-content:center;width:100%}.hist-trend-bar{flex:1;max-width:44px;border-radius:4px 4px 0 0;min-height:3px;position:relative;cursor:default}.hist-trend-bar:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:11px;white-space:nowrap;padding:3px 7px;border-radius:5px;z-index:10}.hist-trend-lbl{font-size:12px;font-weight:700;color:var(--ink);margin-top:10px}.hist-trend-period{font-size:10.5px;color:var(--ink-soft);margin-top:2px}.hist-bar-legend{display:flex;gap:16px;font-size:11px;color:var(--ink-soft);margin-top:14px}.hist-bar-legend span{display:inline-flex;align-items:center;gap:5px}.hist-bar-legend i{width:11px;height:11px;border-radius:3px;display:inline-block}.hist-ftable{width:100%;border-collapse:collapse;font-size:13px}.hist-ftable th{font-size:11px;color:var(--ink-soft);font-weight:700;padding:8px 12px;border-bottom:1.5px solid var(--line);text-align:right}.hist-ftable th:first-child{text-align:left}.hist-ftable td{padding:11px 12px;border-bottom:1px solid var(--line-soft);text-align:right}.hist-ftable td:first-child{text-align:left;font-weight:700}.hist-ftable tr:last-child td{border-bottom:0;background:var(--amber-bg)}.hist-ftable .fn{font-size:15px;font-weight:700}.hist-ftable .fn.amber{color:var(--amber)}.hist-ftable .rate{font-size:10.5px;color:var(--green);font-weight:600;display:block;margin-top:1px}.hist-ftable .diff{font-size:10px;color:var(--green);display:block;margin-top:1px}.hist-growth-row{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--line-soft)}.hist-growth-row:last-child{border-bottom:0}.hist-growth-lbl{font-size:13px;font-weight:700;min-width:62px}.hist-growth-track{flex:1;height:30px;background:var(--track);border-radius:7px;overflow:hidden}.hist-growth-fill{height:100%;background:var(--amber);border-radius:7px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px}.hist-growth-fill span{font-size:11px;font-weight:700;color:#fff;white-space:nowrap}.hist-growth-meta{min-width:160px;font-size:11.5px;color:var(--ink-soft)}.hist-growth-meta b{color:var(--ink)}@media(max-width:880px){.hist-kpi-row{grid-template-columns:repeat(2,1fr)}.hist-trend-wrap{gap:14px}}
+    .event-pick{display:flex;align-items:center;gap:7px;font-size:var(--fs-ui);color:var(--ink-soft)}.event-pick select{font-family:var(--sans);font-size:var(--fs-ui);font-weight:700;color:var(--blue);background:var(--blue-l);border:1.5px solid var(--blue);border-radius:8px;padding:6px 10px;cursor:pointer}.btn-history{font-family:var(--sans);font-size:var(--fs-ui);color:var(--blue);background:var(--blue-l);border:1.5px solid var(--blue);border-radius:8px;padding:7px 14px;cursor:pointer;font-weight:700;transition:.15s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}.btn-history:hover{background:var(--blue);color:#fff}.hist-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap}.btn-hist-back{font-family:var(--sans);font-size:var(--fs-ui);font-weight:700;color:var(--blue);background:var(--blue-l);border:1.5px solid var(--blue);border-radius:8px;padding:8px 16px;cursor:pointer;transition:.15s}.btn-hist-back:hover{background:var(--blue);color:#fff}.hist-title{font-size:var(--fs-h1);font-weight:700;margin:0}.hist-badge{font-size:var(--fs-note);font-weight:700;letter-spacing:.1em;color:var(--ink-soft);background:var(--bg);border-radius:6px;padding:4px 10px;margin-left:auto}.hist-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}.hist-kpi-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}.hist-kpi-card .kl{font-size:var(--fs-note);color:var(--ink-soft)}.hist-kpi-card .kv{font-size:var(--fs-num);font-weight:700;line-height:1.1;margin-top:5px}.hist-kpi-card .kv small{font-size:var(--fs-ui);color:var(--ink-soft);font-weight:400;margin-left:2px}.hist-kpi-card .ks{font-size:var(--fs-note);color:var(--ink-soft);margin-top:4px}.hist-section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px 24px;margin-bottom:20px}.hist-section h3{font-size:var(--fs-h3);font-weight:700;margin:0 0 3px}.hist-section .desc{font-size:var(--fs-body);color:var(--ink-soft);margin:0 0 18px}.hist-trend-wrap{display:flex;gap:32px;align-items:flex-end;padding-bottom:10px;border-bottom:1px solid var(--line-soft)}.hist-trend-group{flex:1;display:flex;flex-direction:column;align-items:center}.hist-trend-bars{display:flex;gap:6px;align-items:flex-end;height:160px;justify-content:center;width:100%}.hist-trend-bar{flex:1;max-width:44px;border-radius:4px 4px 0 0;min-height:3px;position:relative;cursor:default}.hist-trend-bar:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:var(--fs-note);white-space:nowrap;padding:3px 7px;border-radius:5px;z-index:10}.hist-trend-lbl{font-size:var(--fs-ui);font-weight:700;color:var(--ink);margin-top:10px}.hist-trend-period{font-size:var(--fs-micro);color:var(--ink-soft);margin-top:2px}.hist-bar-legend{display:flex;gap:16px;font-size:var(--fs-note);color:var(--ink-soft);margin-top:14px}.hist-bar-legend span{display:inline-flex;align-items:center;gap:5px}.hist-bar-legend i{width:11px;height:11px;border-radius:3px;display:inline-block}.hist-ftable{width:100%;border-collapse:collapse;font-size:var(--fs-ui)}.hist-ftable th{font-size:var(--fs-note);color:var(--ink-soft);font-weight:700;padding:8px 12px;border-bottom:1.5px solid var(--line);text-align:right}.hist-ftable th:first-child{text-align:left}.hist-ftable td{padding:11px 12px;border-bottom:1px solid var(--line-soft);text-align:right}.hist-ftable td:first-child{text-align:left;font-weight:700}.hist-ftable tr:last-child td{border-bottom:0;background:var(--amber-bg)}.hist-ftable .fn{font-size:var(--fs-h3);font-weight:700}.hist-ftable .fn.amber{color:var(--amber)}.hist-ftable .rate{font-size:var(--fs-note);color:var(--green);font-weight:600;display:block;margin-top:1px}.hist-ftable .diff{font-size:var(--fs-note);color:var(--green);display:block;margin-top:1px}.hist-growth-row{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--line-soft)}.hist-growth-row:last-child{border-bottom:0}.hist-growth-lbl{font-size:var(--fs-ui);font-weight:700;min-width:62px}.hist-growth-track{flex:1;height:30px;background:var(--track);border-radius:7px;overflow:hidden}.hist-growth-fill{height:100%;background:var(--amber);border-radius:7px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px}.hist-growth-fill span{font-size:var(--fs-note);font-weight:700;color:#fff;white-space:nowrap}.hist-growth-meta{min-width:160px;font-size:var(--fs-note);color:var(--ink-soft)}.hist-growth-meta b{color:var(--ink)}@media(max-width:880px){.hist-kpi-row{grid-template-columns:repeat(2,1fr)}.hist-trend-wrap{gap:14px}}
     /* ===== 曜日×時間帯の折れ線グラフ（Small Multiples）用スタイル ===== */
     .heat-line-charts {
       display: grid;
@@ -1438,7 +1765,7 @@
     }
     .line-chart-card h4 {
       margin: 0 0 8px 0;
-      font-size: 13.5px;
+      font-size: var(--fs-ui);
       color: var(--ink);
       font-weight: 700;
       display: flex;
@@ -1446,7 +1773,7 @@
       align-items: center;
     }
     .line-chart-card h4 .chart-day-badge {
-      font-size: 10.5px;
+      font-size: var(--fs-note);
       padding: 2px 7px;
       border-radius: 4px;
       background: var(--blue-l);
@@ -1504,13 +1831,13 @@
       r: 5;
     }
     .line-chart-svg .axis-text {
-      font-size: 8.5px;
+      font-size: var(--fs-svg-axis);
       fill: var(--ink-soft);
       text-anchor: middle;
       font-family: var(--sans);
     }
     .line-chart-svg .axis-text-y {
-      font-size: 8px;
+      font-size: var(--fs-svg-axis);
       fill: var(--ink-soft);
       text-anchor: end;
       font-family: var(--sans);
@@ -1520,7 +1847,7 @@
     #dashView { transition: opacity .28s ease; }
     #dashView.refreshing { opacity: .35; }
     .hl-filter-tag {
-      display: inline-block; margin: 0 8px 6px 0; font-size: 11px; font-weight: 700;
+      display: inline-block; margin: 0 8px 6px 0; font-size: var(--fs-note); font-weight: 700;
       color: var(--sakura); background: var(--sakura-bg); border: 1px solid var(--sakura);
       padding: 2px 9px; border-radius: 20px; vertical-align: middle;
     }
@@ -1530,14 +1857,52 @@
     /* 事業者ビューで来訪目的が無いときの控えめな説明 */
     .demo .col.col-empty h4 { color: var(--ink-soft); }
     .demo .col-note {
-      font-size: 11.5px; line-height: 1.7; color: var(--ink-soft);
+      font-size: var(--fs-body); line-height: 1.7; color: var(--ink-soft);
       background: var(--bg); border: 1px dashed var(--line);
       border-radius: 8px; padding: 10px 12px;
     }
-    .filter-chk-grp { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    .filter-chk-grp .filter-lbl { font-size: 12px; color: var(--ink-soft); font-weight: 600; margin-right: 2px; }
+    /* 属性フィルター：カテゴリごとに行を分け、ラベル列を揃えて一覧性を上げる */
+    .filter-panel { padding: 0; overflow: hidden; margin-bottom: 20px; }
+    .filter-head {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      padding: 11px 18px; background: var(--bg); border-bottom: 1px solid var(--line);
+    }
+    .filter-head .ttl {
+      display: flex; align-items: center; gap: 7px;
+      font-size: var(--fs-ui); font-weight: 700; color: var(--ink);
+    }
+    .filter-head .ttl svg { opacity: .65; flex: none; }
+    .filter-head .hint { font-size: var(--fs-note); color: var(--ink-soft); }
+    .filter-actions { margin-left: auto; display: flex; gap: 8px; }
+    .filter-body { display: grid; grid-template-columns: max-content 1fr; }
+    .filter-chk-grp { display: contents; }
+    .filter-chk-grp .filter-lbl {
+      display: flex; align-items: center; gap: 7px; white-space: nowrap;
+      font-size: var(--fs-note); font-weight: 700; color: var(--ink-soft);
+      padding: 13px 16px 13px 18px; border-top: 1px solid var(--line-soft);
+    }
+    .filter-chk-grp .filter-lbl svg { flex: none; opacity: .55; }
+    .filter-chk-grp .filter-lbl .cnt {
+      font-size: var(--fs-note); font-weight: 700; line-height: 1.5;
+      color: #fff; background: var(--blue); border-radius: 999px;
+      padding: 0 7px; display: none;
+    }
+    .filter-chk-grp .filter-lbl .cnt.show { display: inline-block; }
+    .filter-opts {
+      display: flex; flex-wrap: wrap; gap: 7px; align-items: center;
+      padding: 10px 18px; border-top: 1px solid var(--line-soft);
+    }
+    .filter-chk-grp:first-child .filter-lbl,
+    .filter-chk-grp:first-child .filter-opts { border-top: 0; }
+    @media (max-width: 760px) {
+      .filter-body { grid-template-columns: 1fr; }
+      .filter-chk-grp .filter-lbl { padding: 13px 18px 0; }
+      .filter-chk-grp .filter-opts { padding: 9px 18px 13px; border-top: 0; }
+      .filter-chk-grp:first-child .filter-lbl { border-top: 0; }
+      .filter-actions { margin-left: 0; width: 100%; }
+    }
     .chk-pill {
-      display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--ink);
+      display: inline-flex; align-items: center; gap: 5px; font-size: var(--fs-ui); color: var(--ink);
       background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 5px 11px 5px 9px;
       cursor: pointer; user-select: none; transition: all .15s ease;
     }
@@ -1547,7 +1912,7 @@
     .detail-toggle-wrap { margin: 0 0 20px 0; }
     .detail-toggle-btn {
       display: flex; align-items: center; gap: 8px; width: 100%; font-family: var(--sans);
-      font-size: 13px; font-weight: 700; color: var(--ink-soft); background: var(--card);
+      font-size: var(--fs-ui); font-weight: 700; color: var(--ink-soft); background: var(--card);
       border: 1px solid var(--line); border-radius: 10px; padding: 11px 18px; cursor: pointer; transition: .15s;
     }
     .detail-toggle-btn:hover { border-color: var(--blue); color: var(--blue); }
@@ -1556,22 +1921,22 @@
     .detail-toggle-body { margin-top: 14px; }
     /* ===== 参加者一覧（EXCEL風テーブル） ===== */
     .lv-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
-    .lv-title { font-size: clamp(18px, 2.4vw, 23px); font-weight: 700; margin: 0; color: var(--ink); }
-    .lv-desc { font-size: 12.5px; color: var(--ink-soft); margin: 0 0 16px; }
+    .lv-title { font-size: var(--fs-h1); font-weight: 700; margin: 0; color: var(--ink); }
+    .lv-desc { font-size: var(--fs-ui); color: var(--ink-soft); margin: 0 0 16px; }
     .lv-bar {
       display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
       background: var(--card); border: 1px solid var(--line); border-radius: 10px;
       padding: 10px 14px; margin-bottom: 12px;
     }
     .lv-bar input[type="search"], .lv-bar select {
-      font-family: var(--sans); font-size: 12.5px; color: var(--ink);
+      font-family: var(--sans); font-size: var(--fs-ui); color: var(--ink);
       border: 1px solid var(--line); border-radius: 7px; padding: 6px 10px; background: #fff;
     }
     .lv-bar input[type="search"] { min-width: 220px; }
-    .lv-count { font-size: 12.5px; color: var(--ink-soft); }
+    .lv-count { font-size: var(--fs-ui); color: var(--ink-soft); }
     .lv-count b { color: var(--blue); font-weight: 700; }
     .lv-btn {
-      font-family: var(--sans); font-size: 12px; font-weight: 700; cursor: pointer;
+      font-family: var(--sans); font-size: var(--fs-ui); font-weight: 700; cursor: pointer;
       border: 1px solid var(--line); border-radius: 7px; padding: 6px 12px;
       background: #fff; color: var(--ink-soft); transition: all .15s;
     }
@@ -1581,7 +1946,7 @@
       overflow: auto; max-height: 68vh;
       border: 1px solid var(--line); border-radius: 10px; background: var(--card);
     }
-    table.lv-table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 12.5px; }
+    table.lv-table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: var(--fs-ui); }
     table.lv-table th, table.lv-table td {
       border-bottom: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
       padding: 6px 10px; text-align: left; white-space: nowrap;
@@ -1593,16 +1958,16 @@
     table.lv-table thead tr.lv-filters th { top: 33px; z-index: 2; background: #f7f9fc; padding: 4px 6px; }
     table.lv-table thead tr.lv-filters select,
     table.lv-table thead tr.lv-filters input {
-      font-family: var(--sans); font-size: 11.5px; color: var(--ink);
+      font-family: var(--sans); font-size: var(--fs-note); color: var(--ink);
       width: 100%; min-width: 74px; box-sizing: border-box;
       border: 1px solid var(--line); border-radius: 5px; padding: 3px 5px; background: #fff;
     }
     .lv-sort {
       display: flex; align-items: center; gap: 5px; cursor: pointer; user-select: none;
-      font-weight: 700; color: var(--ink); font-size: 12px;
+      font-weight: 700; color: var(--ink); font-size: var(--fs-ui);
     }
     .lv-sort:hover { color: var(--blue); }
-    .lv-sort .ar { font-size: 9px; color: var(--ink-soft); }
+    .lv-sort .ar { font-size: var(--fs-micro); color: var(--ink-soft); }
     .lv-sort.on { color: var(--blue); }
     .lv-sort.on .ar { color: var(--blue); }
     table.lv-table tbody tr:nth-child(even) { background: #fafcfe; }
@@ -1610,21 +1975,21 @@
     table.lv-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
     table.lv-table td.wide { white-space: normal; min-width: 240px; }
     .lv-chip {
-      display: inline-block; font-size: 10.5px; font-weight: 700;
+      display: inline-block; font-size: var(--fs-note); font-weight: 700;
       border-radius: 999px; padding: 1px 8px;
     }
     .lv-chip.rep { background: var(--sakura-bg); color: var(--sakura); }
     .lv-chip.new { background: var(--blue-l); color: var(--blue); }
     .lv-chip.on { background: #E6F4EA; color: var(--green); }
     .lv-chip.off { background: #f0f2f5; color: var(--ink-soft); }
-    .lv-empty { padding: 40px; text-align: center; color: var(--ink-soft); font-size: 13px; }
+    .lv-empty { padding: 40px; text-align: center; color: var(--ink-soft); font-size: var(--fs-ui); }
     .lv-pager { display: flex; align-items: center; gap: 8px; justify-content: flex-end; margin-top: 12px; flex-wrap: wrap; }
-    .lv-pager .pg { font-size: 12.5px; color: var(--ink-soft); }
+    .lv-pager .pg { font-size: var(--fs-ui); color: var(--ink-soft); }
 
     /* スポットのカテゴリ凡例 */
     .cat-leg {
       display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center;
-      margin-top: 10px; font-size: 11px; color: var(--ink-soft);
+      margin-top: 10px; font-size: var(--fs-note); color: var(--ink-soft);
     }
     .cat-leg .ci { display: inline-flex; align-items: center; gap: 5px; }
     .cat-leg .cd {
@@ -1636,7 +2001,7 @@
     /* 主要ルートの表示/非表示スイッチ */
     .route-switch {
       display: flex; align-items: center; gap: 8px; cursor: pointer;
-      font-family: var(--sans); font-size: 11.5px; font-weight: 700; color: var(--ink-soft);
+      font-family: var(--sans); font-size: var(--fs-note); font-weight: 700; color: var(--ink-soft);
       background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 5px 12px 5px 8px;
       transition: all .15s ease;
     }
@@ -1663,7 +2028,7 @@
     .route-line.hl { stroke: var(--route-dk); }
     .route-leg {
       display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px;
-      font-size: 11.5px; color: var(--ink-soft);
+      font-size: var(--fs-note); color: var(--ink-soft);
     }
     .route-leg b { color: var(--ink); }
     .route-leg-scale { display: flex; align-items: center; gap: 6px; }
@@ -1673,14 +2038,33 @@
     }
     #timelineEvents .tl-item { display: flex; gap: 10px; align-items: flex-start; }
     #timelineEvents .tl-dot { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--sakura); margin-top: 4px; box-shadow: 0 0 0 3px var(--sakura-bg); }
-    #timelineEvents .tl-time { flex: none; width: 46px; font-size: 11.5px; font-weight: 700; color: var(--ink-soft); font-variant-numeric: tabular-nums; padding-top: 2px; }
-    #timelineEvents .tl-spot { font-size: 13px; font-weight: 700; color: var(--ink); }
-    #timelineEvents .tl-action { font-size: 11.5px; color: var(--ink-soft); }
-    #timelineEvents .tl-persona { font-size: 12px; font-weight: 700; color: var(--sakura); margin-bottom: 2px; }
+    #timelineEvents .tl-time { flex: none; width: 46px; font-size: var(--fs-note); font-weight: 700; color: var(--ink-soft); font-variant-numeric: tabular-nums; padding-top: 2px; }
+    #timelineEvents .tl-spot { font-size: var(--fs-ui); font-weight: 700; color: var(--ink); }
+    #timelineEvents .tl-action { font-size: var(--fs-note); color: var(--ink-soft); }
+    #timelineEvents .tl-persona { font-size: var(--fs-ui); font-weight: 700; color: var(--sakura); margin-bottom: 2px; }
   </style>
 </head>
 
 <body>
+
+  <!-- アイコン定義（アカウント用の「まち」マーク） -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="icoTownG" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#FFB35C"></stop>
+        <stop offset=".52" stop-color="#F5637E"></stop>
+        <stop offset="1" stop-color="#8B5CF6"></stop>
+      </linearGradient>
+    </defs>
+    <symbol id="icoTown" viewBox="0 0 32 32">
+      <rect width="32" height="32" rx="10.5" fill="url(#icoTownG)"></rect>
+      <circle cx="9.2" cy="9" r="2.4" fill="#FFE9A8"></circle>
+      <rect x="5.4" y="16.6" width="6.8" height="9" rx="1.5" fill="#fff" opacity=".85"></rect>
+      <polygon points="19.4,9.6 26.2,15.3 12.6,15.3" fill="#fff"></polygon>
+      <rect x="15.2" y="15.3" width="8.4" height="10.3" rx="1.5" fill="#fff"></rect>
+      <rect x="17.7" y="18" width="3.5" height="3.5" rx="1" fill="url(#icoTownG)"></rect>
+    </symbol>
+  </svg>
 
   <header class="topbar">
     <div class="brand">
@@ -1698,17 +2082,95 @@
         <select id="storeSel"></select>
       </span>
       <button id="btnRefresh" class="btn-refresh">↺ データ更新</button>
+      <div class="acct">
+        <button id="acctBtn" class="acct-btn" aria-haspopup="true" aria-expanded="false" aria-controls="acctMenu">
+          <span class="acct-avatar" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#icoTown"></use></svg></span>
+          <span class="acct-name" id="acctName"></span>
+          <svg class="acct-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="acct-menu" id="acctMenu" role="menu" aria-labelledby="acctBtn">
+          <div class="acct-info">
+            <div class="acct-info-head">
+              <span class="acct-avatar" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#icoTown"></use></svg></span>
+              <div>
+                <div class="org" id="acctOrg"></div>
+                <div class="person" id="acctPerson"></div>
+              </div>
+            </div>
+            <div class="mail" id="acctMail"></div>
+          </div>
+          <button type="button" class="acct-item" id="btnLogout" role="menuitem">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 14H3.5A1.5 1.5 0 0 1 2 12.5v-9A1.5 1.5 0 0 1 3.5 2H6M10.5 11 14 8l-3.5-3M14 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            ログアウト
+          </button>
+        </div>
+      </div>
     </div>
   </header>
+
+  <!-- ログイン画面（ダミー：実際の認証は行っていない） -->
+  <div class="login-view" id="loginView">
+    <form class="login-card" id="loginForm" autocomplete="off">
+      <div class="login-brand">
+        <img src="logo.png" alt="ろかまっぷ。">
+        <h1>まちの見える化ダッシュボード</h1>
+      </div>
+      <p class="login-error" id="loginError">ログインIDとパスワードを入力してください。</p>
+      <div class="login-field">
+        <label for="loginId">ログインID</label>
+        <input type="text" id="loginId" name="loginId" placeholder="kanko@city.example.lg.jp">
+      </div>
+      <div class="login-field">
+        <label for="loginPw">パスワード</label>
+        <input type="password" id="loginPw" name="loginPw" placeholder="********">
+      </div>
+      <button type="submit" class="login-btn">ログイン</button>
+      <button type="button" class="login-link" id="btnForgot">ID・パスワードをお忘れの方</button>
+      <p class="login-note">これはデモ用のダミー画面です。認証は行われないため、<br>任意の値を入力してログインしてください。</p>
+    </form>
+
+    <!-- 再設定の申請（ダミー：メールは送信されない） -->
+    <form class="login-card" id="resetForm" autocomplete="off" hidden>
+      <div class="login-brand">
+        <img src="logo.png" alt="ろかまっぷ。">
+        <h1>まちの見える化ダッシュボード</h1>
+      </div>
+      <h2 class="login-sub">ID・パスワードの再設定</h2>
+      <p class="login-desc">ご登録のメールアドレス宛に、ログインIDと<br>パスワード再設定用のリンクをお送りします。</p>
+      <p class="login-error" id="resetError">メールアドレスを入力してください。</p>
+      <div class="login-field">
+        <label for="resetMail">メールアドレス</label>
+        <input type="email" id="resetMail" name="resetMail" placeholder="kanko@city.example.lg.jp">
+      </div>
+      <button type="submit" class="login-btn">再設定用リンクを送信</button>
+      <button type="button" class="login-link" id="btnBackToLogin">ログイン画面に戻る</button>
+      <p class="login-note">これはデモ用のダミー画面です。<br>実際にはメールは送信されません。</p>
+    </form>
+
+    <!-- 送信完了（ダミー） -->
+    <div class="login-card" id="resetDone" hidden>
+      <div class="login-brand">
+        <img src="logo.png" alt="ろかまっぷ。">
+        <h1>まちの見える化ダッシュボード</h1>
+      </div>
+      <div class="login-done">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="8 12.5 11 15.5 16 9"></polyline></svg>
+      </div>
+      <h2 class="login-sub">送信しました</h2>
+      <p class="login-desc"><b id="resetSentTo"></b> 宛に<br>再設定用のリンクをお送りしました。<br>メールが届かない場合は迷惑メールフォルダをご確認ください。</p>
+      <button type="button" class="login-btn" id="btnDoneBack">ログイン画面に戻る</button>
+      <p class="login-note">これはデモ用のダミー画面です。<br>実際にはメールは送信されません。</p>
+    </div>
+  </div>
 
   <main id="dashView">
 
     <div class="modebar">
       <div class="modebar-left">
         <span class="modebadge" id="modebadge">まち全体ビュー</span>
-        <span id="modeStoreWrap" style="display:none; align-items:center; gap:6px; font-size:13px; color:var(--ink-soft);">
+        <span id="modeStoreWrap" style="display:none; align-items:center; gap:6px; font-size: var(--fs-ui); color:var(--ink-soft);">
           <span>店舗：</span>
-          <select id="modeStoreSel" style="font-family:var(--sans); font-size:13px; border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer; background:var(--card); color:var(--ink);"></select>
+          <select id="modeStoreSel" style="font-family:var(--sans); font-size: var(--fs-ui); border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer; background:var(--card); color:var(--ink);"></select>
         </span>
       </div>
       <div class="modebar-right">
@@ -1718,7 +2180,7 @@
     </div>
 
     <!-- 属性フィルター -->
-    <div class="panel filter-panel" id="attrFilterDash" style="margin-bottom: 20px; padding: 12px 20px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; border: 1px solid var(--line);"></div>
+    <div class="panel filter-panel" id="attrFilterDash"></div>
 
     <!-- 結論一行 -->
     <div class="headline" id="headline"></div>
@@ -1816,8 +2278,8 @@
         <!-- 個人タイムラインジャーニー -->
         <section class="grid" id="timelineSection" style="margin-bottom: 20px;">
           <div class="panel wide" style="border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px;">
-            <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 4px 0;">代表的な個人の1日周遊ジャーニー</h3>
-            <p class="desc" style="font-size: 11.5px; color: var(--ink-soft); margin: 0 0 16px 0;">選択中のフィルター条件に合致する、代表的な参加者の1日行動タイムラインの例（合成ダミー）。</p>
+            <h3 style="font-size: var(--fs-h3); font-weight: 700; margin: 0 0 4px 0;">代表的な個人の1日周遊ジャーニー</h3>
+            <p class="desc" style="font-size: var(--fs-note); color: var(--ink-soft); margin: 0 0 16px 0;">選択中のフィルター条件に合致する、代表的な参加者の1日行動タイムラインの例（合成ダミー）。</p>
             <div id="timelineContainer" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px; padding-left: 10px; position: relative;">
               <!-- 縦の線 -->
               <div style="position: absolute; left: 16px; top: 10px; bottom: 10px; width: 2px; background: var(--line); z-index: 1;"></div>
@@ -2532,21 +2994,30 @@
       const pill = function(cat, val, label) {
         return '<label class="chk-pill"><input type="checkbox" class="filter-chk" data-cat="' + cat + '" value="' + val + '">' + label + '</label>';
       };
-      return '<span style="font-weight: 700; color: var(--ink); font-size: 13px; display: flex; align-items: center; gap: 6px;">'
-        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.7;"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>'
-        + '属性フィルター:</span>'
-        + '<div class="filter-chk-grp" data-cat="gender"><span class="filter-lbl">性別</span>'
-        + Object.keys(GENDER_LABEL).map(function(k) { return pill('gender', k, GENDER_LABEL[k]); }).join('')
-        + '</div>'
-        + '<div class="filter-chk-grp" data-cat="age"><span class="filter-lbl">年代</span>'
-        + Object.keys(AGE_LABEL).map(function(k) { return pill('age', k, AGE_LABEL[k]); }).join('')
-        + '</div>'
-        + '<div class="filter-chk-grp" data-cat="purpose"><span class="filter-lbl">来訪目的</span>'
-        + Object.keys(PURPOSE_LABEL).map(function(k) { return pill('purpose', k, PURPOSE_LABEL[k]); }).join('')
-        + '</div>'
-        + '<div style="margin-left: auto; display: flex; gap: 8px;">'
-        + '<button type="button" class="btn-apply-filters" style="font-family: var(--sans); font-size: 12.5px; font-weight: 700; background: var(--blue); border: 1px solid var(--blue); border-radius: 7px; padding: 7px 16px; color: #fff; cursor: pointer; transition: all 0.15s;">絞り込んで再解析</button>'
-        + '<button type="button" class="btn-reset-filters" style="font-family: var(--sans); font-size: 12px; background: none; border: 1px solid var(--line); border-radius: 7px; padding: 6px 12px; color: var(--ink-soft); cursor: pointer; font-weight: 600; transition: all 0.15s;">フィルターをクリア</button>'
+      const ico = function(paths) {
+        return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + paths + '</svg>';
+      };
+      // カテゴリ1つ = ラベル列 + ピル列。.filter-chk-grp は display:contents で Grid に展開される
+      const group = function(cat, label, icon, labelMap) {
+        return '<div class="filter-chk-grp" data-cat="' + cat + '">'
+          + '<span class="filter-lbl">' + icon + label + '<span class="cnt" data-cnt="' + cat + '">0</span></span>'
+          + '<div class="filter-opts">'
+          + Object.keys(labelMap).map(function(k) { return pill(cat, k, labelMap[k]); }).join('')
+          + '</div></div>';
+      };
+      return '<div class="filter-head">'
+        + '<span class="ttl">'
+        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>'
+        + '属性フィルター</span>'
+        + '<span class="hint">見たい層を選んで「絞り込んで再解析」</span>'
+        + '<span class="filter-actions">'
+        + '<button type="button" class="btn-apply-filters" style="font-family: var(--sans); font-size: var(--fs-ui); font-weight: 700; background: var(--blue); border: 1px solid var(--blue); border-radius: 7px; padding: 7px 16px; color: #fff; cursor: pointer; transition: all 0.15s;">絞り込んで再解析</button>'
+        + '<button type="button" class="btn-reset-filters" style="font-family: var(--sans); font-size: var(--fs-ui); background: none; border: 1px solid var(--line); border-radius: 7px; padding: 6px 12px; color: var(--ink-soft); cursor: pointer; font-weight: 600; transition: all 0.15s;">フィルターをクリア</button>'
+        + '</span></div>'
+        + '<div class="filter-body">'
+        + group('gender', '性別', ico('<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>'), GENDER_LABEL)
+        + group('age', '年代', ico('<circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 14"></polyline>'), AGE_LABEL)
+        + group('purpose', '来訪目的', ico('<path d="M4 22V4"></path><path d="M4 4h13l-2.5 4L17 12H4"></path>'), PURPOSE_LABEL)
         + '</div>';
     }
     function syncFilterUI() {
@@ -2554,6 +3025,12 @@
         const on = pendingFilters[cb.dataset.cat].indexOf(cb.value) !== -1;
         cb.checked = on;
         cb.closest('.chk-pill').classList.toggle('is-checked', on);
+      });
+      // グループごとの選択数バッジ
+      document.querySelectorAll('[data-cnt]').forEach(function(el) {
+        const n = pendingFilters[el.dataset.cnt].length;
+        el.textContent = n;
+        el.classList.toggle('show', n > 0);
       });
     }
 
@@ -2708,7 +3185,7 @@
         var pct = g.dataset.pct;
         var hs = (g.dataset.hs === 'true');
         g.addEventListener('mouseenter', function () {
-          tip.innerHTML = '<b>' + nm + '</b><br>来訪 ' + v.toLocaleString() + '人（全体の' + pct + '%）' + (hs ? '<br><span style="color:#7ab3e0;font-size:10.5px">▸ クリックで事業者ダッシュボードへ</span>' : '');
+          tip.innerHTML = '<b>' + nm + '</b><br>来訪 ' + v.toLocaleString() + '人（全体の' + pct + '%）' + (hs ? '<br><span style="color:#7ab3e0;font-size: var(--fs-note)">▸ クリックで事業者ダッシュボードへ</span>' : '');
           tip.classList.add('show');
         });
         g.addEventListener('mousemove', function (e) {
@@ -2884,7 +3361,7 @@
           + '<span class="flow-biz-track"><span class="flow-biz-fill" style="width:' + pct + '%;background:' + color + '"></span></span>'
           + '<span class="flow-biz-num num">' + f.n + '人</span>'
           + '</li>';
-      }).join('') || '<li style="padding:12px 0;color:var(--ink-soft);font-size:13px;list-style:none;">データなし</li>';
+      }).join('') || '<li style="padding:12px 0;color:var(--ink-soft);font-size: var(--fs-ui);list-style:none;">データなし</li>';
     }
     function renderHeat(D) {
       const container = $("#heatLineCharts");
@@ -3038,11 +3515,11 @@
         return '<div style="flex:1;height:5px;background:var(--bg);border-radius:3px;">'
           + '<div style="width:' + pct + '%;height:100%;background:' + color + ';border-radius:3px;"></div></div>';
       }
-      var html = '<table style="width:100%;border-collapse:collapse;font-size:12.5px;">'
+      var html = '<table style="width:100%;border-collapse:collapse;font-size: var(--fs-ui);">'
         + '<thead><tr>'
-        + '<th style="text-align:left;padding:5px 8px;border-bottom:1.5px solid var(--line);font-size:11px;color:var(--ink-soft);font-weight:600;">時間帯</th>'
-        + '<th style="padding:5px 8px;border-bottom:1.5px solid var(--line);font-size:11px;color:var(--ink-soft);font-weight:600;">まち全体</th>'
-        + '<th style="padding:5px 8px;border-bottom:1.5px solid var(--line);font-size:11px;color:var(--ink-soft);font-weight:600;">自店</th>'
+        + '<th style="text-align:left;padding:5px 8px;border-bottom:1.5px solid var(--line);font-size: var(--fs-note);color:var(--ink-soft);font-weight:600;">時間帯</th>'
+        + '<th style="padding:5px 8px;border-bottom:1.5px solid var(--line);font-size: var(--fs-note);color:var(--ink-soft);font-weight:600;">まち全体</th>'
+        + '<th style="padding:5px 8px;border-bottom:1.5px solid var(--line);font-size: var(--fs-note);color:var(--ink-soft);font-weight:600;">自店</th>'
         + '</tr></thead><tbody>';
       activeEvent().gov.timeSlots.forEach(function(t) {
         var time = t[0], townN = t[1];
@@ -3056,12 +3533,12 @@
           + '<td style="padding:6px 8px;border-bottom:1px solid var(--line-soft);white-space:nowrap;">' + time + '</td>'
           + '<td style="padding:6px 12px;border-bottom:1px solid var(--line-soft);width:42%;">'
           + '<div style="display:flex;align-items:center;gap:6px;">' + miniBar(townPct, '#29b5e8')
-          + '<span class="num" style="font-size:11.5px;min-width:30px;text-align:right;color:var(--ink-soft);">' + townN + '</span></div></td>'
+          + '<span class="num" style="font-size: var(--fs-note);min-width:30px;text-align:right;color:var(--ink-soft);">' + townN + '</span></div></td>'
           + '<td style="padding:6px 12px;border-bottom:1px solid var(--line-soft);width:42%;">'
           + (storeN != null
             ? '<div style="display:flex;align-items:center;gap:6px;">' + miniBar(storePct, storeColor)
-              + '<span class="num" style="font-size:11.5px;min-width:30px;text-align:right;' + storeNumStyle + '">' + storeN + '</span></div>'
-            : '<span style="color:var(--ink-soft);font-size:11px;">—</span>')
+              + '<span class="num" style="font-size: var(--fs-note);min-width:30px;text-align:right;' + storeNumStyle + '">' + storeN + '</span></div>'
+            : '<span style="color:var(--ink-soft);font-size: var(--fs-note);">—</span>')
           + '</td></tr>';
       });
       html += '</tbody></table>';
@@ -3241,7 +3718,7 @@
       const container = document.getElementById('timelineEvents');
       if (!container) return;
       const journey = pickJourney(D, currentFilters);
-      if (!journey) { container.innerHTML = '<p style="font-size:12.5px;color:var(--ink-soft);">データなし</p>'; return; }
+      if (!journey) { container.innerHTML = '<p style="font-size: var(--fs-ui);color:var(--ink-soft);">データなし</p>'; return; }
       container.innerHTML = '<div class="tl-persona">' + journey.name + '</div>'
         + journey.timeline.map(function(ev) {
           return '<div class="tl-item"><div class="tl-time">' + ev.time + '</div><div class="tl-dot"></div>'
@@ -3276,7 +3753,7 @@
       scaledFunnels.forEach(function(f){ running += f[2].n; cumulSeeds.push(running); });
       var filterTag = filterActive ? '<span class="hist-badge" style="border:1px solid var(--sakura);color:var(--sakura);background:var(--sakura-bg);">絞り込み中: ' + filterSummaryText() + '</span>' : '';
       var html = '<div class="hist-header"><button class="btn-hist-back" id="btnHistBack">← ダッシュボードに戻る</button><h2 class="hist-title">全イベント経過分析</h2><span class="hist-badge">まち全体ビュー</span>' + filterTag + '</div>';
-      html += '<div class="panel filter-panel" id="attrFilterHist" style="margin-bottom: 20px; padding: 12px 20px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; border: 1px solid var(--line);">' + filterGroupsHTML() + '</div>';
+      html += '<div class="panel filter-panel" id="attrFilterHist">' + filterGroupsHTML() + '</div>';
       html += '<div class="hist-kpi-row">'
         +'<div class="hist-kpi-card"><div class="kl">開催回数</div><div class="kv num">'+EVENTS.length+'<small>回</small></div><div class="ks">'+EVENTS[0].period.split('–')[0].trim()+'〜</div></div>'
         +'<div class="hist-kpi-card"><div class="kl">累計参加者</div><div class="kv num">'+totalP.toLocaleString()+'<small>人</small></div><div class="ks">全'+EVENTS.length+'回合計</div></div>'
@@ -3315,7 +3792,7 @@
         var seeds=scaledFunnels[i][2].n,pct=Math.round(seeds/maxSeeds*100);
         html+='<div class="hist-growth-row"><div class="hist-growth-lbl">'+ev.label+'</div><div class="hist-growth-track"><div class="hist-growth-fill" style="width:'+pct+'%"><span>'+seeds.toLocaleString()+'人</span></div></div><div class="hist-growth-meta">'+seedMeta[i].note+'</div></div>';
       });
-      html+='<div style="margin-top:14px;padding:12px 16px;background:var(--amber-bg);border:1px solid var(--amber);border-radius:10px;font-size:12.5px;">累計の芽：';
+      html+='<div style="margin-top:14px;padding:12px 16px;background:var(--amber-bg);border:1px solid var(--amber);border-radius:10px;font-size: var(--fs-ui);">累計の芽：';
       EVENTS.forEach(function(ev,i){html+=ev.label+' <b style="color:var(--amber)">'+cumulSeeds[i].toLocaleString()+'人</b>　';});
       html+='</div></div>';
       document.getElementById('histView').innerHTML = html;
@@ -3735,6 +4212,113 @@
 
     // ===== 参加者一覧 =====
     document.getElementById('btnList').addEventListener('click', showListView);
+
+
+    // ===== アカウント / ログイン（ダミー：実際の認証は行っていない） =====
+    // 表示するアカウント情報。導入先の自治体に合わせてここを書き換える。
+    const ACCOUNT = {
+      org: '〇〇市',
+      person: '観光振興課 ご担当者',
+      mail: 'kanko@city.example.lg.jp'
+    };
+    const AUTH_KEY = 'rokamap_auth';
+
+    function applyAccount() {
+      document.getElementById('acctName').textContent = ACCOUNT.org;
+      document.getElementById('acctOrg').textContent = ACCOUNT.org;
+      document.getElementById('acctPerson').textContent = ACCOUNT.person;
+      document.getElementById('acctMail').textContent = ACCOUNT.mail;
+    }
+
+    // プライベートブラウズ等で localStorage が使えない場合もダッシュボードは動かす
+    function isLoggedIn() {
+      try { return localStorage.getItem(AUTH_KEY) === '1'; } catch (e) { return false; }
+    }
+
+    function closeAcctMenu() {
+      document.getElementById('acctMenu').classList.remove('show');
+      document.getElementById('acctBtn').setAttribute('aria-expanded', 'false');
+    }
+
+    function showLogin() {
+      closeAcctMenu();
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginError').classList.remove('show');
+      showLoginCard('loginForm');
+      document.getElementById('loginView').classList.add('show');
+      document.body.classList.add('logged-out');
+    }
+
+    function showApp() {
+      document.getElementById('loginView').classList.remove('show');
+      document.body.classList.remove('logged-out');
+      window.scrollTo({ top: 0 });
+    }
+
+    // ログイン / 再設定申請 / 送信完了 の3カードを出し分ける
+    function showLoginCard(which) {
+      ['loginForm', 'resetForm', 'resetDone'].forEach(function (id) {
+        document.getElementById(id).hidden = (id !== which);
+      });
+    }
+
+    document.getElementById('btnForgot').addEventListener('click', function () {
+      document.getElementById('resetForm').reset();
+      document.getElementById('resetError').classList.remove('show');
+      showLoginCard('resetForm');
+    });
+
+    document.getElementById('btnBackToLogin').addEventListener('click', function () { showLoginCard('loginForm'); });
+    document.getElementById('btnDoneBack').addEventListener('click', function () { showLoginCard('loginForm'); });
+
+    document.getElementById('resetForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const mail = document.getElementById('resetMail').value.trim();
+      // ダミー：空欄チェックのみ。メール送信も保存も行わない。
+      if (!mail) {
+        document.getElementById('resetError').classList.add('show');
+        return;
+      }
+      document.getElementById('resetSentTo').textContent = mail;
+      showLoginCard('resetDone');
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const id = document.getElementById('loginId').value.trim();
+      const pw = document.getElementById('loginPw').value;
+      // ダミー認証：空欄でなければ通す。パスワードは照合も保存もしない。
+      if (!id || !pw) {
+        document.getElementById('loginError').classList.add('show');
+        return;
+      }
+      try { localStorage.setItem(AUTH_KEY, '1'); } catch (e) { }
+      showApp();
+    });
+
+    document.getElementById('acctBtn').addEventListener('click', function (e) {
+      e.stopPropagation();
+      const menu = document.getElementById('acctMenu');
+      const opening = !menu.classList.contains('show');
+      menu.classList.toggle('show', opening);
+      this.setAttribute('aria-expanded', opening);
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', function () {
+      try { localStorage.removeItem(AUTH_KEY); } catch (e) { }
+      showLogin();
+    });
+
+    // メニューの外側クリック / Esc で閉じる
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.acct')) closeAcctMenu();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeAcctMenu();
+    });
+
+    applyAccount();
+    if (!isLoggedIn()) showLogin();
 
     renderCatLegend();
     setEvent(0);
