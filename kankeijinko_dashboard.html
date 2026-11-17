@@ -2527,7 +2527,7 @@
         { cl: "平均周遊スポット", cv: "4.7", u: "/人", cs: "延べ 7,426 タップ", bm: "設置8か所中の59%" }
       ],
       inflowTitle: "流入元（どこから来たか）",
-      inflowDesc: "ろかID登録の正確なデータ。第1回のリピーターが県外からの再訪を牽引。",
+      inflowDesc: "ろかID登録の正確なデータ。第1回からの再参加者が県外からの再訪を牽引。",
       inflow: [["和歌山県内", 35], ["大阪府", 26], ["奈良県", 10], ["東京・関東", 10], ["兵庫県", 7], ["京都府", 6], ["その他・海外", 6]],
       demoTitle: "来訪者プロファイル（誰が来たか）",
       demo: {
@@ -2868,7 +2868,7 @@
     const STORES3 = {
       "海辺のカフェ": {
         factor: 0.553,
-        headline: '今夏、あなたのお店には <span class="hl">1,062人</span> が来てくれました。3回連続で参加者の過半数が来店。<span class="ha">リピーターと思われる来訪も増え、海辺のカフェ→海鮮食堂→夜の地酒バーという夜まで続く流れが定着してきました。</span>',
+        headline: '今夏、あなたのお店には <span class="hl">1,062人</span> が来てくれました。3回連続で参加者の過半数が来店。<span class="ha">再参加と思われる来訪も増え、海辺のカフェ→海鮮食堂→夜の地酒バーという夜まで続く流れが定着してきました。</span>',
         aiTip: '「海辺のカフェ→海鮮食堂→夜の地酒バー」という夜まで続く周遊が定着しています。3店舗合同の「一日周遊セット券」を企画すると、周遊全体の単価と満足度を高められます。',
         aiRefs: [
           { t: '3店舗連携の周遊セット券で客単価が向上した事例', o: 'K町 観光協会 実践レポート' }
@@ -3986,7 +3986,7 @@
       { key: "purpose",  label: "来訪目的",     type: "select" },
       { key: "spotCnt",  label: "訪問スポット数", type: "number" },
       { key: "spots",    label: "訪問スポット", type: "text", wide: true },
-      { key: "repeat",   label: "初回/リピーター", type: "select" },
+      { key: "repeat",   label: "初回/再参加", type: "select" },
       { key: "notify",   label: "通知",         type: "select" }
     ];
     const listCache = {};
@@ -4026,7 +4026,7 @@
           purpose: D.demo.purpose ? pickWeighted(D.demo.purpose, rnd) : "観光・レジャー",
           spotCnt: picked.length,
           spots: picked.join("、"),
-          repeat: rnd() < repeatRate ? "リピーター" : "初回",
+          repeat: rnd() < repeatRate ? "再参加" : "初回",
           notify: rnd() < notifyRate ? "ON" : "OFF"
         });
       }
@@ -4108,7 +4108,7 @@
           + "<td>" + r.purpose + "</td>"
           + '<td class="num">' + r.spotCnt + "</td>"
           + '<td class="wide">' + r.spots + "</td>"
-          + '<td><span class="lv-chip ' + (r.repeat === "リピーター" ? "rep" : "new") + '">' + r.repeat + "</span></td>"
+          + '<td><span class="lv-chip ' + (r.repeat === "再参加" ? "rep" : "new") + '">' + r.repeat + "</span></td>"
           + '<td><span class="lv-chip ' + (r.notify === "ON" ? "on" : "off") + '">' + r.notify + "</span></td>"
           + "</tr>";
       }).join("") : '<tr><td colspan="' + LIST_COLS.length + '" class="lv-empty">条件に一致する参加者はいません。</td></tr>';
@@ -4317,11 +4317,54 @@
       if (e.key === 'Escape') closeAcctMenu();
     });
 
+    /* ===== URLで画面状態を指定する（Figma取り込み・レビュー用） =====
+       例: ?view=biz&store=2&event=3&detail=1
+       screen : dash（既定）/ hist / list / login / reset / reset-done
+       view   : gov（既定）/ biz      store : 店舗の番号(1〜)または店舗名
+       event  : 1〜3                    route / detail / townref / menu : 1 で開いた状態
+       パラメータが無ければ通常どおりの初期表示になる。 */
+    function applyUrlState() {
+      const q = new URLSearchParams(location.search);
+      if (!q.toString()) return;
+      const screen = q.get('screen') || 'dash';
+      if (screen === 'login' || screen === 'reset' || screen === 'reset-done') {
+        showLogin();
+        if (screen === 'reset') showLoginCard('resetForm');
+        if (screen === 'reset-done') {
+          document.getElementById('resetSentTo').textContent = 'kanko@city.example.lg.jp';
+          showLoginCard('resetDone');
+        }
+        return;
+      }
+      const ev = parseInt(q.get('event'), 10);
+      if (ev >= 1 && ev <= EVENTS.length) {
+        document.getElementById('eventSel').value = String(ev - 1);
+        setEvent(ev - 1);
+      }
+      if (q.get('view') === 'biz') {
+        const names = Object.keys(activeEvent().stores);
+        const s = q.get('store');
+        const name = names[parseInt(s, 10) - 1] || (names.indexOf(s) >= 0 ? s : names[0]);
+        document.getElementById('storeSel').value = name;
+        document.getElementById('modeStoreSel').value = name;
+        setMode('biz');
+      }
+      if (q.get('route') === '1' && mode === 'gov') setRouteVisible(true);
+      const detailBtn = document.getElementById('btnDetailToggle');
+      if (q.get('detail') === '1' && detailBtn.getAttribute('aria-expanded') !== 'true') detailBtn.click();
+      const refBtn = document.getElementById('btnTownRef');
+      if (q.get('townref') === '1' && mode === 'biz' && refBtn.getAttribute('aria-expanded') !== 'true') refBtn.click();
+      if (screen === 'hist') showHistoryView();
+      if (screen === 'list') showListView();
+      if (q.get('menu') === '1') document.getElementById('acctBtn').click();
+    }
+
     applyAccount();
     if (!isLoggedIn()) showLogin();
 
     renderCatLegend();
     setEvent(0);
+    applyUrlState();
   </script>
 </body>
 
